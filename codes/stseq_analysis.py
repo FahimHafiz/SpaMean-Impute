@@ -13,9 +13,12 @@ Useful links:
 2) https://scanpy-tutorials.readthedocs.io/en/latest/spatial/basic-analysis.html
 
 
-Dataset Links with ground truth:
+Stereo-seq Dataset Links with ground truth:
 1) https://db.cngb.org/stomics/lista/download/
 
+
+Directory:
+1) D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/xyz-seq/
 """
 
 # scanpy settings
@@ -29,8 +32,8 @@ sc.settings.verbosity = 3
 # Stereo-seq Data
 # dataset_name = '151507'
 # DX6_D2_stereo-seq.h5ad, DT2_D0_stereo-seq.h5ad, FB2_D1_stereo-seq.h5ad
-dataset = 'FB2_D1_stereo-seq.h5ad'
-file_fold = 'D:/Research/spatial_transcriptomics/Data/stereo-seq/' + str(dataset) #please replace 'file_fold' with the download path
+dataset = 'GSM5009529_XYZeq_raw.h5ad'
+file_fold = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/xyz-seq/' + str(dataset) #please replace 'file_fold' with the download path
 
 # Load the Stereo-seq data
 adata = sc.read_h5ad(file_fold)
