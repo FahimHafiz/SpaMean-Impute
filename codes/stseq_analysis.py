@@ -6,6 +6,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn import metrics
+import magic
+from sklearn.impute import KNNImputer
+from missingpy import MissForest
+
 
 """
 Useful links:
@@ -124,19 +128,19 @@ ii) Cells with more than 35000 total counts are removed.
 iii) Cells with >20% mitochondrial gene expression are removed.
 iv) Only genes that appear in at least 10 cells are retained.
 """
-sc.pp.filter_cells(adata, min_counts=5000)
-sc.pp.filter_cells(adata, max_counts=35000)
+sc.pp.filter_cells(adata, min_counts=50)
+sc.pp.filter_cells(adata, max_counts=3500)
 adata = adata[adata.obs["pct_counts_mt"] < 20].copy()
 print(f"#cells after MT filter: {adata.n_obs}")
-sc.pp.filter_genes(adata, min_cells=10)
+sc.pp.filter_genes(adata, min_cells=5)
 
 
 # Normalization and Feature Selection
 sc.pp.normalize_total(adata, inplace=True)
 sc.pp.log1p(adata)
-sc.pp.highly_variable_genes(adata, flavor="seurat", n_top_genes=200)
+sc.pp.highly_variable_genes(adata, flavor="seurat", n_top_genes=2000)
 
-# Dimensionality Reduction and Clustering
+# Dimensionality Reduction and Clustering without Imputation
 """
 The below codes perform the followings:
 i) Reduce data complexity using PCA.
@@ -162,13 +166,131 @@ sc.pl.umap(adata, color=["total_counts", "n_genes_by_counts", "clusters"], wspac
 
 
 
+# Step 1: Perform PCA, Neighbors, UMAP, and Clustering BEFORE imputation
+sc.pp.pca(adata)
+sc.pp.neighbors(adata)
+sc.tl.umap(adata)
+sc.tl.leiden(adata, key_added="clusters", directed=False, n_iterations=2)
+
+# Step 2: Apply KNN-based Imputation
+adata_imputed = adata.copy()  # Create a copy to preserve original data
+knn_imputer = KNNImputer(n_neighbors=5)  # Use 5 nearest neighbors for imputation
+adata_imputed.X = knn_imputer.fit_transform(adata.X.toarray())  # Impute missing values
+
+# Step 3: Redo PCA, Neighbors, UMAP, and Clustering AFTER Imputation
+sc.pp.pca(adata_imputed)
+sc.pp.neighbors(adata_imputed)
+sc.tl.umap(adata_imputed)
+sc.tl.leiden(adata_imputed, key_added="clusters_imputed", directed=False, n_iterations=2)
+
+# Step 4: Compute ARI (Adjusted Rand Index) for both original and imputed data
+ARI_original = metrics.adjusted_rand_score(adata.obs['clusters'], adata.obs['CellType'])
+ARI_imputed = metrics.adjusted_rand_score(adata_imputed.obs['clusters_imputed'], adata.obs['CellType'])
+
+adata.uns['ARI_original'] = ARI_original
+adata_imputed.uns['ARI_imputed'] = ARI_imputed
+
+print('ARI (Before Imputation):', ARI_original)
+print('ARI (After Imputation):', ARI_imputed)
+
+# Step 5: Improved UMAP Visualization (Reduce point size)
+plt.rcParams["figure.figsize"] = (5, 5)
+sc.pl.umap(adata_imputed, color=["total_counts", "n_genes_by_counts", "clusters_imputed"], size=10, wspace=0.1)
+
+
+##################################################################
+##################################################################
+##################################################################
+
+
+
+# Step 1: Perform MAGIC Imputation
+adata_imputed = adata.copy()
+adata_imputed.X = magic.MAGIC().fit_transform(adata_imputed.X)
+
+# Step 2: Perform Clustering
+sc.pp.pca(adata_imputed)
+sc.pp.neighbors(adata_imputed)
+sc.tl.umap(adata_imputed)
+sc.tl.leiden(adata_imputed, key_added="clusters_imputed_magic", directed=False, n_iterations=2)
+
+# Step 3: Compute ARI
+ARI_original = metrics.adjusted_rand_score(adata.obs['clusters'], adata.obs['CellType'])
+ARI_imputed = metrics.adjusted_rand_score(adata_imputed.obs['clusters_imputed_magic'], adata.obs['CellType'])
+
+print('ARI (Before Imputation):', ARI_original)
+print('ARI (After Imputation):', ARI_imputed)
+
+
+
+##################################################################
+##################################################################
+##################################################################
+
+
+# Step 1: Prepare Data
+adata_raw = adata.copy()
+
+# Step 2: Run Scrublet
+scrub = scr.Scrublet(adata_raw.X)
+doublet_scores, predicted_doublets = scrub.scrub_doublets()
+
+# Step 3: Store Scrublet Imputed Data
+adata_imputed = adata_raw.copy()
+adata_imputed.obs['doublet_score'] = doublet_scores
+adata_imputed.obs['predicted_doublet'] = predicted_doublets
+
+# Step 4: Perform Clustering
+sc.pp.pca(adata_imputed)
+sc.pp.neighbors(adata_imputed)
+sc.tl.umap(adata_imputed)
+sc.tl.leiden(adata_imputed, key_added="clusters_imputed", directed=False, n_iterations=2)
+
+# Step 5: Compute ARI
+ARI_original = metrics.adjusted_rand_score(adata.obs['clusters'], adata.obs['CellType'])
+ARI_imputed = metrics.adjusted_rand_score(adata_imputed.obs['clusters_imputed'], adata.obs['CellType'])
+
+print('ARI (Before Imputation):', ARI_original)
+print('ARI (After Imputation):', ARI_imputed)
+
+
+##################################################################
+##################################################################
+##################################################################
+
+
+from fancyimpute import SoftImpute
 
 
 
 
+##################################################################
+##################################################################
+##################################################################
 
 
 
+from sklearn.impute import SimpleImputer
+
+# Copy the original data
+adata_imputed = adata.copy()
+
+# Apply Simple Imputation (Replace zeros with mean value of each gene)
+imputer = SimpleImputer(strategy="mean")  # You can change to "median"
+adata_imputed.X = imputer.fit_transform(adata_imputed.X)
+
+# Perform Clustering
+sc.pp.pca(adata_imputed)
+sc.pp.neighbors(adata_imputed)
+sc.tl.umap(adata_imputed)
+sc.tl.leiden(adata_imputed, key_added="clusters_imputed_simple", directed=False, n_iterations=2)
+
+# Compute ARI
+ARI_original = metrics.adjusted_rand_score(adata.obs['clusters'], adata.obs['CellType'])
+ARI_imputed = metrics.adjusted_rand_score(adata_imputed.obs['clusters_imputed_simple'], adata.obs['CellType'])
+
+print('ARI (Before Imputation):', ARI_original)
+print('ARI (After Imputation):', ARI_imputed)
 
 
 
