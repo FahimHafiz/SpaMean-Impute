@@ -27,9 +27,8 @@ sc.set_figure_params(facecolor="white", figsize=(8, 8))
 sc.settings.verbosity = 3
 
 
-## Read spatial transcriptomics data
+## Read spatial transcriptomics data--> h5ad Data
 
-# Stereo-seq Data
 # dataset_name = '151507'
 # DX6_D2_stereo-seq.h5ad, DT2_D0_stereo-seq.h5ad, FB2_D1_stereo-seq.h5ad
 dataset = 'GSM5009529_XYZeq_raw.h5ad'
@@ -39,22 +38,15 @@ file_fold = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground tru
 adata = sc.read_h5ad(file_fold)
 adata.var_names_make_unique()
 
-
 # Exploring the data in details!
 
 print(f"The spatial data in AnnData format:\n {adata}\n\n")
 print(f"Spot's row and column index:\n {adata.obs.head()}\n\n")  # Print first 5 rows
-print(f'Spots in/out tissue indications:\n {adata.obs["in_tissue"].unique()}\n\n')
-print(f"Tissue gene information:\n {adata.var.head()}\n\n")  # Print first 5 rows
+print(f"Tissue gene information:\n {adata.var}\n\n")  
 print(f"Gene Names:\n {adata.var.index}\n\n")  # Names of genes
-print(f'Unique feature types in the spatial data:\n {adata.var["feature_types"].unique()}\n\n')
-print(f"Unstructured Data:\n {adata.uns.keys()}\n\n")  # See what’s stored
-print(f'RGB information of each spot:\n {adata.uns["spatial"]}\n\n')
-print(f'Spatial Information of each spot:\n {adata.obsm["spatial"]}\n\n')  # Print (x, y) spatial coordinates
-print(f'Size of the spatial Information of each spot:\n {adata.obsm["spatial"].shape}\n\n')
 
 # View Expression Matrix
-print(f"Spot-wise Gene Expression Matrix:\n {adata.X}\n\n")
+print(f"Spot-wise Gene Expression Matrix:\n {adata.X.toarray()}\n\n")
 
 df_sge_mat = pd.DataFrame(adata.X.toarray(), index=adata.obs.index, columns=adata.var.index)
 print(f"Spot-wise Gene Expression Matrix in dataframe format:\n {df_sge_mat.head()}")
@@ -62,23 +54,6 @@ print(f"Spot-wise Gene Expression Matrix in dataframe format:\n {df_sge_mat.head
 
 # Statistics of the data
 print(f"Spot Statistics:\n {adata.obs.describe()}\n\n")
-print(f"Gene Statistics:\n {adata.var.describe()}\n\n")
-
-
-# Get Images info from unstructured data
-images_uns = adata.uns["spatial"][dataset_name]["images"]
-print("Image infos:", images_uns)
-
-
-# Get Scaling Factors from unstructured data
-scalefactors = adata.uns["spatial"][dataset_name]["scalefactors"]
-
-print("High-Resolution Scale Factor:", scalefactors["tissue_hires_scalef"])
-print("Low-Resolution Scale Factor:", scalefactors["tissue_lowres_scalef"])
-
-# Get metadata info from unstructured data
-metadata_uns = adata.uns["spatial"][dataset_name]["metadata"]
-print("Metadata infos:", metadata_uns)
 
 # End of Dataset Exploration
 
@@ -159,7 +134,7 @@ sc.pp.filter_genes(adata, min_cells=10)
 # Normalization and Feature Selection
 sc.pp.normalize_total(adata, inplace=True)
 sc.pp.log1p(adata)
-sc.pp.highly_variable_genes(adata, flavor="seurat", n_top_genes=2000)
+sc.pp.highly_variable_genes(adata, flavor="seurat", n_top_genes=200)
 
 # Dimensionality Reduction and Clustering
 """
@@ -176,19 +151,44 @@ sc.tl.umap(adata)
 sc.tl.leiden(adata, key_added="clusters", directed=False, n_iterations=2)
 
 # ARI Calculation
-ARI = metrics.adjusted_rand_score(adata.obs['clusters'], adata.obs['Ground_Truth'])
+ARI = metrics.adjusted_rand_score(adata.obs['clusters'], adata.obs['CellType'])
 adata.uns['ARI'] = ARI
 print('ARI:', ARI)
 
 # UMAP Visualization of the spots considering "total_counts", "n_genes_by_counts" and "cluster number"
 
 plt.rcParams["figure.figsize"] = (4, 4)
-sc.pl.umap(adata, color=["total_counts", "n_genes_by_counts", "clusters"], wspace=0.2)
+sc.pl.umap(adata, color=["total_counts", "n_genes_by_counts", "clusters"], wspace=0.1)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##################################### To Be Explore Later
 # Visualization in spatial coordinates i.e. Visualizing Spatially Clustered Cells
 
 plt.rcParams["figure.figsize"] = (8, 8)
+
+
 
 """
 The below codes perform the followings:
