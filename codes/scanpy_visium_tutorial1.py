@@ -27,7 +27,7 @@ sc.settings.verbosity = 3
 # DLPFC Data
 # dataset_name = '151507'
 
-dataset = '151507'
+dataset = '151510'
 output_h5ad = dataset + '_processed'
 dataset_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/visium/DLPFC/' + str(dataset) 
 output_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/visium/DLPFC/'+ str(output_h5ad) + '.h5ad'
@@ -159,7 +159,7 @@ ii) Cells with more than 35000 total counts are removed.
 iii) Cells with >20% mitochondrial gene expression are removed.
 iv) Only genes that appear in at least 10 cells are retained.
 """
-sc.pp.filter_cells(adata, min_counts=5000)
+sc.pp.filter_cells(adata, min_counts=500)
 sc.pp.filter_cells(adata, max_counts=35000)
 adata = adata[adata.obs["pct_counts_mt"] < 20].copy()
 print(f"#cells after MT filter: {adata.n_obs}")
