@@ -8,7 +8,6 @@ import seaborn as sns
 from sklearn import metrics
 import magic
 from sklearn.impute import KNNImputer
-from missingpy import MissForest
 
 
 """
@@ -35,11 +34,12 @@ sc.settings.verbosity = 3
 
 # dataset_name = '151507'
 # DX6_D2_stereo-seq.h5ad, DT2_D0_stereo-seq.h5ad, FB2_D1_stereo-seq.h5ad
-dataset = 'GSM5009529_XYZeq_raw.h5ad'
-file_fold = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/xyz-seq/' + str(dataset) #please replace 'file_fold' with the download path
-
+dataset = 'GSE164430_spleen_all_XYZeq_raw'
+output_h5ad = dataset + '_processed'
+dataset_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/xyz-seq/' + str(dataset) + '.h5ad' #please replace 'file_fold' with the download path
+output_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/xyz-seq/'+ str(output_h5ad) + '.h5ad'
 # Load the Stereo-seq data
-adata = sc.read_h5ad(file_fold)
+adata = sc.read_h5ad(dataset_path)
 adata.var_names_make_unique()
 
 # Exploring the data in details!
@@ -50,7 +50,7 @@ print(f"Tissue gene information:\n {adata.var}\n\n")
 print(f"Gene Names:\n {adata.var.index}\n\n")  # Names of genes
 
 # View Expression Matrix
-print(f"Spot-wise Gene Expression Matrix:\n {adata.X.toarray()}\n\n")
+print(f"Spot-wise Gene Expression Matrix:\n {adata.X}\n\n")
 
 df_sge_mat = pd.DataFrame(adata.X.toarray(), index=adata.obs.index, columns=adata.var.index)
 print(f"Spot-wise Gene Expression Matrix in dataframe format:\n {df_sge_mat.head()}")
@@ -138,7 +138,29 @@ sc.pp.filter_genes(adata, min_cells=5)
 # Normalization and Feature Selection
 sc.pp.normalize_total(adata, inplace=True)
 sc.pp.log1p(adata)
-sc.pp.highly_variable_genes(adata, flavor="seurat", n_top_genes=2000)
+
+# Save AnnData object
+adata.write(output_path)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Dimensionality Reduction and Clustering without Imputation
 """

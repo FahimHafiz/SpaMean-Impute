@@ -32,7 +32,7 @@ sc.settings.verbosity = 3
 
 # dataset_name = '151507'
 # DX6_D2_stereo-seq.h5ad, DT2_D0_stereo-seq.h5ad, FB2_D1_stereo-seq.h5ad
-dataset = 'D0_DT2_processed'
+dataset = 'DT2_D0_stereo-seq'
 output_h5ad = dataset + '_processed'
 dataset_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/stereo-seq/' + str(dataset) + '.h5ad' #please replace 'file_fold' with the download path
 output_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/stereo-seq/'+ str(output_h5ad) + '.h5ad'
@@ -48,9 +48,9 @@ print(f"Tissue gene information:\n {adata.var}\n\n")
 print(f"Gene Names:\n {adata.var.index}\n\n")  # Names of genes
 
 # View Expression Matrix
-print(f"Spot-wise Gene Expression Matrix:\n {adata.X.toarray()}\n\n")
+print(f"Spot-wise Gene Expression Matrix:\n {adata.X}\n\n")
 
-df_sge_mat = pd.DataFrame(adata.X.toarray(), index=adata.obs.index, columns=adata.var.index)
+df_sge_mat = pd.DataFrame(adata.X, index=adata.obs.index, columns=adata.var.index)
 print(f"Spot-wise Gene Expression Matrix in dataframe format:\n {df_sge_mat.head()}")
 # df_sge_mat.to_csv("V1_Human_Lymph_Node_sge.csv", index=False)
 
@@ -127,7 +127,7 @@ iii) Cells with >20% mitochondrial gene expression are removed.
 iv) Only genes that appear in at least 10 cells are retained.
 """
 sc.pp.filter_cells(adata, min_counts=50)
-sc.pp.filter_cells(adata, max_counts=3500)
+sc.pp.filter_cells(adata, max_counts=35000)
 adata = adata[adata.obs["pct_counts_mt"] < 20].copy()
 print(f"#cells after MT filter: {adata.n_obs}")
 sc.pp.filter_genes(adata, min_cells=5)
@@ -136,7 +136,7 @@ sc.pp.filter_genes(adata, min_cells=5)
 # Normalization and Feature Selection
 sc.pp.normalize_total(adata, inplace=True)
 sc.pp.log1p(adata)
-sc.pp.highly_variable_genes(adata, flavor="seurat", n_top_genes=2000)
+# sc.pp.highly_variable_genes(adata, flavor="seurat", n_top_genes=2000)
 
 # Save AnnData object
 adata.write(output_path)
