@@ -27,7 +27,7 @@ sc.settings.verbosity = 3
 # DLPFC Data
 # dataset_name = '151507'
 
-dataset = '151510'
+dataset = '151676'
 output_h5ad = dataset + '_processed'
 dataset_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/visium/DLPFC/' + str(dataset) 
 output_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/visium/DLPFC/'+ str(output_h5ad) + '.h5ad'
