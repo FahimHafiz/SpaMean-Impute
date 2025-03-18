@@ -27,20 +27,20 @@ sc.settings.verbosity = 3
 # DLPFC Data
 # dataset_name = '151507'
 
-dataset = 'DT2_D0_stereo-seq'
+dataset = '151507'
 output_h5ad = dataset + '_processed'
-dataset_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/stereo-seq/' + str(dataset) + '.h5ad' #please replace 'file_fold' with the download path
-output_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/stereo-seq/'+ str(output_h5ad) + '.h5ad'
+dataset_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/visium/DLPFC/' + str(dataset) 
+output_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/visium/DLPFC/'+ str(output_h5ad) + '.h5ad'
 
 
-dataset = '151673'
-file_fold = 'D:/Research/spatial_transcriptomics/Data/' + str(dataset) #please replace 'file_fold' with the download path
-adata = sc.read_visium(file_fold, count_file='filtered_feature_bc_matrix.h5', load_images=True)
+
+# adata = sc.read_visium(dataset_path, count_file='filtered_feature_bc_matrix.h5', load_images=True)
+adata = sc.read_10x_h5(dataset_path+'/filtered_feature_bc_matrix.h5')
 adata.var_names_make_unique()
 
 # Adding ground truth to the ann data
 
-df_meta = pd.read_csv(file_fold + '/metadata.tsv', sep='\t')
+df_meta = pd.read_csv(dataset_path + '/metadata.tsv', sep='\t')
 df_meta_layer = df_meta['layer_guess']
 adata.obs['annotation'] = df_meta_layer.values
 adata = adata[~pd.isnull(adata.obs['annotation'])] 
@@ -169,6 +169,21 @@ sc.pp.filter_genes(adata, min_cells=10)
 # Normalization and Feature Selection
 sc.pp.normalize_total(adata, inplace=True)
 sc.pp.log1p(adata)
+# Save AnnData object
+adata.write(output_path)
+
+
+
+
+
+
+
+
+
+
+
+
+
 sc.pp.highly_variable_genes(adata, flavor="seurat", n_top_genes=2000)
 
 # Dimensionality Reduction and Clustering
