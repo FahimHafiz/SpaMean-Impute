@@ -25,7 +25,14 @@ sc.settings.verbosity = 3
 ## Read spatial transcriptomics data
 
 # DLPFC Data
-dataset_name = '151507'
+# dataset_name = '151507'
+
+dataset = 'DT2_D0_stereo-seq'
+output_h5ad = dataset + '_processed'
+dataset_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/stereo-seq/' + str(dataset) + '.h5ad' #please replace 'file_fold' with the download path
+output_path = 'D:/Research/spatial_transcriptomics/Data/Final Data with ground truth/stereo-seq/'+ str(output_h5ad) + '.h5ad'
+
+
 dataset = '151673'
 file_fold = 'D:/Research/spatial_transcriptomics/Data/' + str(dataset) #please replace 'file_fold' with the download path
 adata = sc.read_visium(file_fold, count_file='filtered_feature_bc_matrix.h5', load_images=True)
@@ -35,13 +42,13 @@ adata.var_names_make_unique()
 
 df_meta = pd.read_csv(file_fold + '/metadata.tsv', sep='\t')
 df_meta_layer = df_meta['layer_guess']
-adata.obs['Ground_Truth'] = df_meta_layer.values
-adata = adata[~pd.isnull(adata.obs['Ground_Truth'])] 
+adata.obs['annotation'] = df_meta_layer.values
+adata = adata[~pd.isnull(adata.obs['annotation'])] 
 
-# Downloaded data
-dataset_name = "V1_Human_Lymph_Node"
-adata = sc.datasets.visium_sge(sample_id="V1_Human_Lymph_Node")
-adata.var_names_make_unique()
+# # Downloaded data
+# dataset_name = "V1_Human_Lymph_Node"
+# adata = sc.datasets.visium_sge(sample_id="V1_Human_Lymph_Node")
+# adata.var_names_make_unique()
 
 # Exploring the data in details!
 
@@ -68,20 +75,20 @@ print(f"Spot Statistics:\n {adata.obs.describe()}\n\n")
 print(f"Gene Statistics:\n {adata.var.describe()}\n\n")
 
 
-# Get Images info from unstructured data
-images_uns = adata.uns["spatial"][dataset_name]["images"]
-print("Image infos:", images_uns)
+# # Get Images info from unstructured data
+# images_uns = adata.uns["spatial"][dataset_name]["images"]
+# print("Image infos:", images_uns)
 
 
-# Get Scaling Factors from unstructured data
-scalefactors = adata.uns["spatial"][dataset_name]["scalefactors"]
+# # Get Scaling Factors from unstructured data
+# scalefactors = adata.uns["spatial"][dataset_name]["scalefactors"]
 
-print("High-Resolution Scale Factor:", scalefactors["tissue_hires_scalef"])
-print("Low-Resolution Scale Factor:", scalefactors["tissue_lowres_scalef"])
+# print("High-Resolution Scale Factor:", scalefactors["tissue_hires_scalef"])
+# print("Low-Resolution Scale Factor:", scalefactors["tissue_lowres_scalef"])
 
-# Get metadata info from unstructured data
-metadata_uns = adata.uns["spatial"][dataset_name]["metadata"]
-print("Metadata infos:", metadata_uns)
+# # Get metadata info from unstructured data
+# metadata_uns = adata.uns["spatial"][dataset_name]["metadata"]
+# print("Metadata infos:", metadata_uns)
 
 # End of Dataset Exploration
 
