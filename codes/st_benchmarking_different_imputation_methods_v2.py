@@ -27,20 +27,6 @@ Failed Imputation Methods:
 5)
 """
 
-from google.colab import drive
-drive.mount('/content/drive')
-
-# @title installing packages
-!pip install scanpy
-!pip install magic-impute
-!pip install igraph
-!pip3 install leidenalg
-# !pip install -U scvi-tools
-# !pip install scArches
-# !pip install dca
-!pip install autoimpute
-
-# !python3 -m pip install adobo --user
 
 # @title importing packages
 import os
@@ -64,15 +50,6 @@ from scipy.sparse.linalg import svds
 from autoimpute.imputations import SingleImputer, MultipleImputer, MiceImputer
 import tracemalloc
 
-# Display Colab configuration
-cpu_info = os.popen('cat /proc/cpuinfo').read()
-ram_info = os.popen('cat /proc/meminfo').read()
-print(f"Colab CPU:\n{cpu_info}")
-print(f"Colab RAM:\n{ram_info}")
-
-def calculate_sparsity(matrix):
-    """Calculate the proportion of zero values in a matrix."""
-    return np.mean(matrix == 0)*100
 
 # @title Reading preprocessed ST Datasets
 
