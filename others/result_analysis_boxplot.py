@@ -93,9 +93,10 @@ def plot_metric_boxplot(
 ### Reordering the Dataframe..................
 
 # Load data (adjust file path and method as needed)
-filename = 'visium_all_imputation_results'
+filename = 'scispace_all_imputation_results'
 df = pd.read_csv(filename+'.csv')  # or pd.read_excel("your_file.xlsx")
 long_df_name = filename + '_reordered' + '.csv'
+technology_label = 'Scispace'
 
 # Step 2: Identify metrics and methods dynamically
 acc_metrics = ["ARI", "NMI", "AMI", "HOMO"]
@@ -189,21 +190,21 @@ sorted_df.to_csv(long_df_name, index=False)
 
 # Plot ARI
 plot_metric_boxplot(sorted_df, metric="ARI", method_order=method_order, 
-                            title="ARI Comparison for Visium",  box_width = 0.5, 
+                            title=f"ARI Comparison for {technology_label}",  box_width = 0.5, 
                             fliersize =3, fig_width=12, fig_height=6,
                             label_fontsize=14, xtick_fontsize=11, ytick_fontsize=16, 
                             title_fontsize=16, subtitle_fontsize=13)
 
 # Plot NMI
 plot_metric_boxplot(sorted_df, metric="NMI", method_order=method_order, 
-                            title="NMI Comparison for Visium",  box_width = 0.5, 
+                            title=f"NMI Comparison for {technology_label}",  box_width = 0.5, 
                             fliersize =3, fig_width=12, fig_height=6,
                             label_fontsize=14, xtick_fontsize=11, ytick_fontsize=16, 
                             title_fontsize=16, subtitle_fontsize=13)
 
 # Plot AMI
 plot_metric_boxplot(sorted_df, metric="AMI", method_order=method_order, 
-                            title="AMI Comparison for Visium",  box_width = 0.5, 
+                            title=f"AMI Comparison for {technology_label}",  box_width = 0.5, 
                             fliersize =3, fig_width=12, fig_height=6,
                             label_fontsize=14, xtick_fontsize=11, ytick_fontsize=16, 
                             title_fontsize=16, subtitle_fontsize=13)
@@ -211,21 +212,21 @@ plot_metric_boxplot(sorted_df, metric="AMI", method_order=method_order,
 
 # Plot HOMO
 plot_metric_boxplot(sorted_df, metric="HOMO", method_order=method_order, 
-                            title="HOMO Comparison for Visium",  box_width = 0.5, 
+                            title=f"HOMO Comparison for {technology_label}",  box_width = 0.5, 
                             fliersize =3, fig_width=12, fig_height=6,
                             label_fontsize=14, xtick_fontsize=11, ytick_fontsize=16, 
                             title_fontsize=16, subtitle_fontsize=13)
 
 # Plot Runtime
 plot_metric_boxplot(sorted_df, metric="Runtime (s)", method_order=method_order_baseless, labelname=" ",
-                            title="Runtime (s) Comparison for Visium",  box_width = 0.3, 
+                            title=f"Runtime (s) Comparison for {technology_label}",  box_width = 0.3, 
                             fliersize =3, fig_width=12, fig_height=6,
                             label_fontsize=14, xtick_fontsize=11, ytick_fontsize=16, 
                             title_fontsize=16, subtitle_fontsize=13)
 
 # Plot Memory
 plot_metric_boxplot(sorted_df, metric="Memory (MB)", method_order=method_order_baseless, labelname=" ",
-                            title="Memory (MB) Comparison for Visium",  box_width = 0.3, 
+                            title=f"Memory (MB) Comparison for {technology_label}",  box_width = 0.3, 
                             fliersize =3, fig_width=12, fig_height=6,
                             label_fontsize=14, xtick_fontsize=11, ytick_fontsize=16, 
                             title_fontsize=16, subtitle_fontsize=13)
