@@ -1,5 +1,5 @@
 # ST_impute_benchmarking
- A benchmarking analysis of scRNA-seq and Spatial transcriptomics (ST) based imputations on different Spatial Transcriptomics Data
+ A benchmarking analysis of general imputation methods, scRNA-seq, and Spatially Resolved Transcriptomics (SRT) based imputations on different Spatial Transcriptomics Technologies.
 
 # Gene Selection, Imputation & Clustering Pipeline
 
@@ -20,7 +20,7 @@ This repository provides a complete pipeline for gene selection, imputation, and
   - gimVI
   - Tangram
   - More imputation Methods (Easily extendable within the `Imputation Evaluator` class)
-- **Clustering**: Leiden clustering is utilized for inferencing.
+- **Clustering**: Leiden clustering is utilized for inference.
 - **Batch Processing Modes**:
   - **Full Batch Mode**: Processes all `.h5ad` files in a directory, executing runs for all genes, top 2000 genes, and top 5000 genes before saving results in a `.csv` file.
   - **Semi Batch Mode**: Allows processing of a specified number of datasets at a time.
@@ -32,10 +32,10 @@ The flexible batch modes ensure that different computational setups can process 
 
 ## Dataset Information
 The following datasets are used:
-- Visium
+- 10x Genomics Visium
 - Stereo-seq
-- Slide-seq
-- SciSpace
+- Slide-seqV2
+- sci-Space
 - XYZeq
 
 Additionally, key evaluation metrics such as **ARI, NMI, HOMO, AMI, zero sparsity, runtime, and memory usage** are calculated for each imputation method.
@@ -44,6 +44,8 @@ Additionally, key evaluation metrics such as **ARI, NMI, HOMO, AMI, zero sparsit
 You can access the datasets here:
 - **Processed Datasets Link**: [Dataset Link](https://drive.google.com/drive/folders/1mNmJe9xVNpLtMlJGBOsdc9aJEleVhr36?usp=sharing)
 
+### Proposed Imputation Framework-->SpaMean-Impute
+We also propose a scalable, fast, and efficient imputation method, 'SpaMean-Impute', that is implemented in Python. The details can be found in the 'codes' folder.
 
 ## Usage Instructions
 1. Clone the repository:
