@@ -81,11 +81,15 @@ You can install SpaMeanImpute from PyPI:
 
 ```bash
 pip install SpaMeanImpute
+pip install igraph
+pip install leidenalg
 ```
 Or install directly from the GitHub repository:
 ```bash
 git clone https://github.com/FahimHafiz/SpaMean-Impute/tree/main/SpaMeanImpute
 cd SpaMeanImpute
+pip install igraph
+pip install leidenalg
 pip install -e .
 ```
 
