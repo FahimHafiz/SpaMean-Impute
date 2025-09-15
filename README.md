@@ -62,6 +62,7 @@ You can access the datasets here:
 We also propose a scalable, fast, and efficient imputation method, 'SpaMean-Impute', that is implemented in Python. SpaMeanImpute is a Python package for imputing missing gene expression values in spatial transcriptomics datasets.  
 It leverages spatial neighborhood information to improve downstream clustering and analysis.
 
+<img src="others/SpaMean_Impute.png" width="800px" align="center" />
 ---
 
 ## ✨ Features
