@@ -22,12 +22,12 @@ It leverages spatial neighborhood information to improve downstream clustering a
 You can install SpaMeanImpute from PyPI:
 
 ```bash
-pip install spameanimpute
+pip install SpaMeanImpute
 ```
 Or install directly from the GitHub repository:
 ```bash
-git clone https://github.com/FahimHafiz/SpaMean-Impute.git
-cd SpaMean-Impute
+git clone https://github.com/FahimHafiz/SpaMean-Impute/tree/main/SpaMeanImpute
+cd SpaMeanImpute
 pip install -e .
 ```
 
@@ -58,6 +58,7 @@ input_file — Path to input .h5ad file.
 ## 🐍 Python API
 
 ```python
+import spa_mean_impute
 from spa_mean_impute.imputer import SpaMeanImpute
 
 imputer = SpaMeanImpute(k=9, threshold=0.1, n_top=5000)
