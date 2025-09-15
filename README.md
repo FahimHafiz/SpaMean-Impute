@@ -11,7 +11,7 @@
 
 ## Table of Contents
 - [Benchmakring](#ST_impute_benchmarking)
-- [New Method](#Proposed Imputation Framework-->SpaMeanImpute)
+- [New Method](#Proposed_Imputation_Framework)
 
 ## ST_impute_benchmarking
  A benchmarking analysis of general imputation methods, scRNA-seq, and Spatially Resolved Transcriptomics (SRT) based imputations on different Spatial Transcriptomics Technologies.
@@ -57,7 +57,7 @@ Additionally, key evaluation metrics such as **ARI, NMI, HOMO, AMI, zero sparsit
 You can access the datasets here:
 - **Processed Datasets Link**: [Dataset Link](https://drive.google.com/drive/folders/1mNmJe9xVNpLtMlJGBOsdc9aJEleVhr36?usp=sharing)
 
-## Proposed Imputation Framework-->SpaMeanImpute
+## Proposed_Imputation_Framework
 We also propose a scalable, fast, and efficient imputation method, 'SpaMean-Impute', that is implemented in Python. SpaMeanImpute is a Python package for imputing missing gene expression values in spatial transcriptomics datasets.  
 It leverages spatial neighborhood information to improve downstream clustering and analysis.
 
