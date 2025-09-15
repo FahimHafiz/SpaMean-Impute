@@ -11,7 +11,7 @@
 
 ## Table of Contents
 - [Benchmakring](#ST_impute_benchmarking)
-- [New Method](#SpaMeanImpute)
+- [New Method](#Proposed Imputation Framework-->SpaMeanImpute)
 
 ## ST_impute_benchmarking
  A benchmarking analysis of general imputation methods, scRNA-seq, and Spatially Resolved Transcriptomics (SRT) based imputations on different Spatial Transcriptomics Technologies.
