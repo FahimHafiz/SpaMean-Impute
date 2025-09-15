@@ -1,4 +1,5 @@
-### Interpretable Discovery of Patterns in Tabular Data via Spatially Semantic Topographic Maps
+[![PyPI version](https://badge.fury.io/py/SpaMeanImpute.svg)](https://badge.fury.io/py/SpaMeanImpute)
+### Spatial Information Matters: Are Traditional Imputation Methods Effective for Spatial Transcriptomics Data?
 
 **TL;DR:** Python implementation of SRT Imputation Benchmark and new Imputation Framework SpaMeanImpute proposed.
 
